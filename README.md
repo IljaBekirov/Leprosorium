@@ -1,1 +1,1 @@
-# BarberShop
+# Leprosorium
