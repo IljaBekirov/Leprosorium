@@ -22,7 +22,7 @@ configure do
 end
 
 get '/' do
-  erb 'Can you handle a <a href="/secure/place">secret</a>?'
+  erb :index
 end
 
 get '/new' do
@@ -32,11 +32,15 @@ end
 post '/new' do
   content = params[:content]
 
+  validate_content(content)
+
+  @db.execute 'insert into Posts (content, created_date) values (?, datetime())', [content]
+  erb "You typed #{content}"
+end
+
+def validate_content(content)
   if content.length <= 0
     @error = 'Type post text'
     return erb :new
   end
-
-  @db.execute 'insert into Posts (content, created_date) values (?, datetime())', [content]
-  erb "You typed #{content}"
 end
