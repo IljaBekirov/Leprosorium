@@ -41,6 +41,11 @@ post '/new' do
   erb "You typed #{content}"
 end
 
+get '/details/:post_id' do
+  post_id = params[:post_id]
+  erb "Displaying information for post with id #{post_id}"
+end
+
 def validate_content(content)
   if content.length <= 0
     @error = 'Type post text'
