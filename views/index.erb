@@ -2,13 +2,16 @@
 <br />
 <% @results.each do |post| %>
   <p>
+    <% count = 0 %>
+    <% @comments_count.map do |comment| %>
+      <% count += 1 if comment['post_id'] == post['id'] %>
+    <% end %>
+    <br />
     <%= post['content'] %>
     <br />
     <br />
-    <small>Addet at <%= post['created_date'] %></small>
-    <br />
-    <br />
-    <em><a href="/details/<%= post['id'] %>">Comments</a></em>
+    <p class="text-right"><small><%= post['name'] %> Addet at <%= post['created_date'] %></small></p>
+    <em><a href="/details/<%= post['id'] %>">Comments (<%= count %>)</a></em>
   </p>
   <hr />
 <% end %>

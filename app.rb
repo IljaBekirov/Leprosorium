@@ -17,7 +17,8 @@ configure do
   @db.execute 'CREATE TABLE if not exists Posts (
 	id	INTEGER PRIMARY KEY AUTOINCREMENT,
 	created_date	DATE,
-	content	TEXT
+	content	TEXT,
+  name TEXT
 )'
 
   @db.execute 'CREATE TABLE if not exists Comments (
@@ -30,6 +31,7 @@ end
 
 get '/' do
   @results = @db.execute 'select * from Posts order by id  desc'
+  @comments_count = @db.execute 'select * from Comments'
   erb :index
 end
 
@@ -38,15 +40,21 @@ get '/new' do
 end
 
 post '/new' do
+  name = params[:name]
   content = params[:content]
 
   # validate_content(content, :new)
+  if name.length <= 0
+    @error = 'Enter your name'
+    return erb :new
+  end
+
   if content.length <= 0
     @error = 'Type post text'
     return erb :new
   end
 
-  @db.execute 'insert into Posts (content, created_date) values (?, datetime())', [content]
+  @db.execute 'insert into Posts (name, content, created_date) values (?, ?, datetime())', [name, content]
 
   redirect to '/'
   erb "You typed #{content}"

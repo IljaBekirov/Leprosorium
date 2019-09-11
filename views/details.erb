@@ -1,9 +1,11 @@
 <h4>Post details:</h4>
 <p>
   <br />
+  <%#= @row %>
   <%= @row['content'] %>
   <br />
   <br />
+  <p class="text-right"><%= @row['name'] %></p>
   <p class="text-right">Addet at <%= @row['created_date'] %></p>
 </p>
 <h4>Comments:</h4>
