@@ -19,6 +19,13 @@ configure do
 	created_date	DATE,
 	content	TEXT
 )'
+
+  @db.execute 'CREATE TABLE if not exists Comments (
+	id	INTEGER PRIMARY KEY AUTOINCREMENT,
+	post_id	INTEGER,
+	content	TEXT,
+  created_date	DATE
+)'
 end
 
 get '/' do
@@ -33,7 +40,11 @@ end
 post '/new' do
   content = params[:content]
 
-  validate_content(content)
+  # validate_content(content, :new)
+  if content.length <= 0
+    @error = 'Type post text'
+    return erb :new
+  end
 
   @db.execute 'insert into Posts (content, created_date) values (?, datetime())', [content]
 
@@ -46,13 +57,30 @@ get '/details/:post_id' do
 
   results = @db.execute 'select * from Posts where id = ?', [post_id]
   @row = results[0]
+  @comments = @db.execute 'select * from Comments where post_id = ?', [post_id]
 
   erb :details
 end
 
-def validate_content(content)
+post '/details/:post_id' do
+  post_id = params[:post_id]
+  content = params[:content]
+
+  # validate_content(content, :details)
   if content.length <= 0
     @error = 'Type post text'
-    return erb :new
+    return erb 'Error'
   end
+
+  @db.execute 'insert into Comments (post_id, content, created_date) values (?, ?, datetime())', [post_id, content]
+
+  redirect to "/details/#{post_id}"
+  erb :details
 end
+
+# def validate_content(content, endpount)
+#   if content.length <= 0
+#     @error = 'Type post text'
+#     return erb endpount.to_sym
+#   end
+# end
