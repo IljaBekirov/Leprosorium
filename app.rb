@@ -75,7 +75,7 @@ post '/details/:post_id' do
   @db.execute 'insert into Comments (post_id, content, created_date) values (?, ?, datetime())', [post_id, content]
 
   redirect to "/details/#{post_id}"
-  erb :details
+  # erb :details
 end
 
 # def validate_content(content, endpount)

@@ -4,7 +4,7 @@
   <%= @row['content'] %>
   <br />
   <br />
-  Addet at <%= @row['created_date'] %>
+  <p class="text-right">Addet at <%= @row['created_date'] %></p>
 </p>
 <h4>Comments:</h4>
 <p>
@@ -13,8 +13,7 @@
     <%= comment['content'] %>
     <br />
     <br />
-    Addet at <%= comment['created_date'] %>
-    <br />
+    <p class="text-right"><small>Addet at <%= comment['created_date'] %></small></p>
     <hr />
   <% end %>
 </p>
